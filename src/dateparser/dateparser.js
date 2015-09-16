@@ -120,6 +120,25 @@ angular.module('ui.bootstrap.dateparser', [])
       }
     });
 
+    // check for literal values
+    for (var i = 0; i < regex.length; i++) {
+      var literal = false;
+      if (regex[i] === '\'') {
+        if (!literal) {
+          regex[i] = '';
+          literal = true;
+        } else {
+          if ((i+1 < regex.length) && (regex[i+1] !== '\'')) {
+            regex[i] = '\'';
+            regex[i+1] = '';
+          } else {
+            regex[i] = '';
+            literal = false;
+          }
+        }
+      }
+    }
+
     return {
       regex: new RegExp('^' + regex.join('') + '$'),
       map: orderByFilter(map, 'index')
